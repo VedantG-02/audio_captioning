@@ -3,7 +3,7 @@
 results with ```MLP``` bridge
 | lora r | lora alpha | BLEU-4 score | ROUGE-L score | METEOR score |
 | --- | --- | --- | --- | --- |
-| 8 | 8 | 5.80 | 16.61 | 25.58 |
+| 8 | 8 | 6.04 | 16.89 | 25.92 |
 | 8 | 16 | - | - | - |
 | 8 | 64 | - | - | - |
 | 16 | 8 | - | - | - |
