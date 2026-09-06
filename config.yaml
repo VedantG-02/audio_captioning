@@ -1,0 +1,24 @@
+feature_dir: "./features"
+to_pool: True
+max_length: 512
+hidden_dim: 2048
+whisper_dim: 1024
+
+bridge: 'mlp' # 'mlp' / 'qformer'
+
+qformer:
+  use_pretrained: False
+  pretrained_model: "Salesforce/blip2-opt-2.7b"
+  window_size: 50
+  queries_per_window: 10
+
+epochs: 60
+batch_size: 16
+lr: 0.00005
+weight_decay: 0.01
+
+lora:
+  r: 8
+  alpha: 8
+  dropout: 0.05
+  targets: ["q_proj", "v_proj", "k_proj", "o_proj"]
