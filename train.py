@@ -32,9 +32,10 @@ def train():
     model = AudioLLM(config).to(device)
     train_dataset = CaptionDataset(f"{config['feature_dir']}/train")
     if config['to_pool']:
-        num_audio_tokens = 300
+        raw_feature_len  = 300
     else:
-        num_audio_tokens = 1500
+        raw_feature_len  = 1500
+    num_audio_tokens = model.get_num_audio_tokens(raw_feature_len) 
     collator = DataCollator(model.tokenizer, num_audio_tokens=num_audio_tokens, max_length=config['max_length'])
     train_loader = DataLoader(train_dataset, batch_size=config['batch_size'], shuffle=True, collate_fn=collator)
 

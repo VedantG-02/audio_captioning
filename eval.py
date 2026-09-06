@@ -43,10 +43,11 @@ def eval():
     references = []
 
     if config["to_pool"]:
-        times = 300
+        raw_feature_len  = 300
     else:
-        times = 1500
-    audio_placeholders = "<|audio_pad|>" * times
+        raw_feature_len  = 1500
+    num_audio_tokens = model.get_num_audio_tokens(raw_feature_len)
+    audio_placeholders = "<|audio_pad|>" * num_audio_tokens
     prompt = f"<|audio_start|>{audio_placeholders}<|audio_end|>\nTask: Describe the sound in this audio.\nAnswer: "
     prompt_encodings = model.tokenizer(prompt, return_tensors="pt", add_special_tokens=False)
     prompt_ids = prompt_encodings.input_ids.to(device)

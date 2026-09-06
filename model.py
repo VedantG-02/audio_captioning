@@ -164,6 +164,19 @@ class AudioLLM(nn.Module):
                 window_size=qformer_cfg['window_size'],
                 queries_per_window=qformer_cfg['queries_per_window']
             )
+
+    def get_num_audio_tokens(self, raw_seq_len):
+        bridge_type = self.config['bridge']
+        if bridge_type == "mlp":
+            return raw_seq_len
+        elif bridge_type == "qformer":
+            qformer_cfg = self.config['qformer']
+            window_size = qformer_cfg['window_size']
+            queries_per_window = qformer_cfg['queries_per_window']        
+            pad_len = (window_size - (raw_seq_len % window_size)) % window_size
+            padded_len = raw_seq_len + pad_len
+            num_windows = padded_len // window_size
+            return num_windows * queries_per_window
         
     def forward(self, audio_features, input_ids, attention_mask, labels):
         if torch.isnan(audio_features).any() or torch.isinf(audio_features).any():
@@ -171,6 +184,7 @@ class AudioLLM(nn.Module):
         audio_features = audio_features.to(torch.float32)
         projected_audio = self.bridge(audio_features).to(torch.bfloat16)
         text_embeds = self.llm.get_input_embeddings()(input_ids).to(torch.bfloat16)
+        num_bridge_tokens = projected_audio.shape[1]
         inputs_embeds_list = []
         for batch_idx in range(input_ids.shape[0]):
             ids = input_ids[batch_idx]
@@ -181,6 +195,12 @@ class AudioLLM(nn.Module):
             s_idx = s_indices[0].item() + 1
             e_idx = e_indices[0].item()
             num_placeholders = e_idx - s_idx
+            if num_placeholders != num_bridge_tokens:
+                raise ValueError(
+                    f"Sequence length mismatch! Input text has {num_placeholders} audio placeholders "
+                    f"(<|audio_pad|>), but bridge output has {num_bridge_tokens} tokens. "
+                    f"Ensure DataCollator uses model.get_num_audio_tokens()."
+                )
             sample_embeds = torch.cat([
                 text_embeds[batch_idx, :s_idx],
                 projected_audio[batch_idx, :num_placeholders],
