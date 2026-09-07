@@ -17,7 +17,7 @@ results with ```QFormer``` bridge
 | lora r | lora alpha | BLEU-4 score | ROUGE-L score | METEOR score |
 | --- | --- | --- | --- | --- |
 | 8 | 8 | 11.27 | 24.30 | 33.14 |
-| 8 | 16 | - | - | - |
+| 8 | 16 | 11.36 | 24.09 | 32.89 |
 | 8 | 64 | - | - | - |
 | 16 | 8 | - | - | - |
 | 16 | 16 | - | - | - |
