@@ -1,4 +1,5 @@
 # audio_captioning
+A dummy SALMONN based architecture for audio captioning trained on Clotho dataset 
 
 results with ```MLP``` bridge
 | lora r | lora alpha | BLEU-4 score | ROUGE-L score | METEOR score |
