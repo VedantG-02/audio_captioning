@@ -4,7 +4,7 @@ A dummy SALMONN based architecture for audio captioning trained on Clotho datase
 ## To Run
 1. Download Clotho dataset
 ```
-python download_dataset.py
+python download_data.py
 ```
 2. Train the model (change hyperparams from config.yaml)
 ```
