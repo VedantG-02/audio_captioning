@@ -12,7 +12,7 @@ qformer:
   window_size: 50
   queries_per_window: 10
 
-epochs: 60
+epochs: 10
 batch_size: 16
 lr: 0.00005
 weight_decay: 0.01
